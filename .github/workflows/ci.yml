@@ -1,0 +1,46 @@
+---
+name: Continuous Integration
+
+on:
+  push:
+    branches: [master]
+
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  run-tests-on-chrome:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run Cucumber tests (Chrome)
+        run: mvn test -Dbrowser=chrome
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Firefox_Test_Report
+          path: target/cucumber-report.html
+
+  run-tests-on-firefox:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run Cucumber tests (Firefox)
+        run: mvn test -Dbrowser=firefox
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Firefox_Test_Report
+          path: target/cucumber-report.html
