@@ -18,6 +18,12 @@ public class HomePageSteps {
         page.clickOnPageLink(link);
     }
 
+    @Then("the sub-header text is {string}")
+    public void verifySubheaderText(String expectedText) {
+        String actual = page.getSubheaderText();
+        assertEquals(expectedText, actual);
+    }
+
     @Then("a list of the following sub-pages is displayed")
     public void verifyListSubPages(DataTable dt) {
         List<String> subPageNames = dt.asList();

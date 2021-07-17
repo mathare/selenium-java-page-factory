@@ -50,18 +50,6 @@ public class CommonSteps {
         assertEquals(url, BasePage.driver.getCurrentUrl());
     }
 
-    @Then("the header text is {string}")
-    public void verifyHeaderText(String expectedText) {
-        String actual = BasePage.getHeaderText();
-        assertEquals(expectedText, actual);
-    }
-
-    @Then("the sub-header text is {string}")
-    public void verifySubheaderText(String expectedText) {
-        String actual = BasePage.getHeader2Text();
-        assertEquals(expectedText, actual);
-    }
-
     @Then("the page title is {string}")
     public void verifyPageTitle(String expectedText) {
         String actual = Objects.requireNonNull(getPage()).getPageTitleText();
