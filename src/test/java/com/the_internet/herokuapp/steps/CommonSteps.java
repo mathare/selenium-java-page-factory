@@ -1,7 +1,7 @@
 package com.the_internet.herokuapp.steps;
 
 import com.the_internet.herokuapp.DriverManager;
-import com.the_internet.herokuapp.pages.BasePage;
+import com.the_internet.herokuapp.pages.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -13,9 +13,13 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Objects;
+
 import static org.junit.Assert.assertEquals;
 
 public class CommonSteps {
+
+    private String page;
 
     @Before
     public void setup() {
@@ -38,6 +42,7 @@ public class CommonSteps {
 
     @Given("I have navigated to the 'the-internet' {string} page")
     public void navigateTo(String pageName) {
+        page = pageName;
         String url = BasePage.PAGE_URLS.get(pageName.toLowerCase());
         BasePage.driver.get(url);
         new WebDriverWait(BasePage.driver, 20).until(
@@ -59,7 +64,7 @@ public class CommonSteps {
 
     @Then("the page title is {string}")
     public void verifyPageTitle(String expectedText) {
-        String actual = BasePage.getPageTitleText();
+        String actual = Objects.requireNonNull(getPage()).getPageTitleText();
         assertEquals(expectedText, actual);
     }
 
@@ -95,6 +100,22 @@ public class CommonSteps {
     public void verifyPageFooterLinkUrl(String expectedUrl) {
         String actual = BasePage.getPageFooterLinkUrl();
         assertEquals(expectedUrl, actual);
+    }
+
+    private BasePage getPage() {
+        switch (page.toLowerCase()) {
+            case "home":
+                return new HomePage();
+            case "checkboxes":
+                return new CheckboxesPage();
+            case "dropdown":
+                return new DropdownPage();
+            case "dynamic controls":
+                return new DynamicControlsPage();
+            case "form authentication":
+                return new FormAuthenticationPage();
+        }
+        return null;
     }
 
 }
