@@ -1,12 +1,15 @@
 package com.the_internet.herokuapp.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Map;
 
 public abstract class BasePage {
+
+    public static WebDriver driver;
 
     public static final String BASE_URL = "https://the-internet.herokuapp.com";
 
@@ -19,77 +22,42 @@ public abstract class BasePage {
             Map.entry("inputs", BASE_URL + "/inputs"),
             Map.entry("secure area", BASE_URL + "/secure")
     );
-    protected static final By listElementLocator = By.tagName("li");
-    protected static final By anchorLocator = By.tagName("a");
-    protected static final By imageLocator = By.tagName("img");
-    protected static final By parentLocator = By.xpath("./..");
-    private static final By header1Locator = By.tagName("h1");
-    private static final By header2Locator = By.tagName("h2");
-    private static final By header3Locator = By.tagName("h3");
-    private static final By header4Locator = By.tagName("h4");
-    private static final By forkLinkLocator = By.xpath("/html/body/div[2]/a");
-    private static final By footerLocator = By.id("page-footer");
-    public static WebDriver driver;
 
-    public static String getHeaderText() {
-        return driver.findElement(header1Locator).getText();
+    @FindBy(xpath = "/html/body/div[2]/a")
+    static WebElement forkLink;
+
+    @FindBy(xpath = "/html/body/div[2]/a/img")
+    static WebElement forkLinkImg;
+
+    @FindBy(id = "page-footer")
+    static WebElement footer;
+
+    @FindBy(xpath = "//*[@id = \"page-footer\"]//a")
+    static WebElement footerLink;
+
+    public BasePage() {
+        PageFactory.initElements(driver, this);
     }
 
-    public static String getHeader2Text() {
-        return driver.findElement(header2Locator).getText();
-    }
-
-    private static String getHeader3Text() {
-        return driver.findElement(header3Locator).getText();
-    }
-
-    private static String getHeader4Text() {
-        return driver.findElement(header4Locator).getText();
-    }
-
-    private static WebElement getGitHubForkLink() {
-        return driver.findElement(forkLinkLocator);
-    }
-
-    private static WebElement getPageFooter() {
-        return driver.findElement(footerLocator);
-    }
-
-    public static String getPageTitleText() {
-        // As there is no consistency in terms of the heaading level used for the page titles across the various pages
-        // use a nested try-catch block to find the right heading to use as the page title
-        try {
-            return getHeader2Text();
-        } catch (org.openqa.selenium.NoSuchElementException e1) {
-            try {
-                return getHeader3Text();
-            } catch (org.openqa.selenium.NoSuchElementException e2) {
-                try {
-                    return getHeader4Text();
-                } catch (org.openqa.selenium.NoSuchElementException e3) {
-                    return "No page title element found";
-                }
-            }
-        }
-    }
+    public abstract String getPageTitleText();
 
     public static String getGitHubForkText() {
-        return getGitHubForkLink().findElement(imageLocator).getAttribute("alt");
+        return forkLinkImg.getAttribute("alt");
     }
 
     public static String getGitHubForkLinkUrl() {
-        return getGitHubForkLink().getAttribute("href");
+        return forkLink.getAttribute("href");
     }
 
     public static String getGitHubForkImagePosition() {
-        return getGitHubForkLink().findElement(imageLocator).getAttribute("style");
+        return forkLinkImg.getAttribute("style");
     }
 
     public static String getPageFooterText() {
-        return getPageFooter().getText();
+        return footer.getText();
     }
 
     public static String getPageFooterLinkUrl() {
-        return getPageFooter().findElement(anchorLocator).getAttribute("href");
+        return footerLink.getAttribute("href");
     }
 }

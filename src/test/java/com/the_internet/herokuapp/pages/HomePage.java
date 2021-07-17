@@ -1,39 +1,47 @@
 package com.the_internet.herokuapp.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomePage extends BasePage {
 
-    private static final By subPageListLocator = By.xpath("//*[@id=\"content\"]/ul");
+    @FindBy(tagName = "h1")
+    WebElement pageTitle;
 
-    private WebElement getSubPageList() {
-        return driver.findElement(subPageListLocator);
+    @FindBy(tagName = "h2")
+    WebElement subheader;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/ul/li")
+    List<WebElement> allSubPages;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/ul/li//a")
+    List<WebElement> allSubPageLinks;
+
+    public HomePage() {
+        super();
+        PageFactory.initElements(driver, this);
     }
 
-    public List<WebElement> getAllSubPageListElements() {
-        return getSubPageList().findElements(listElementLocator);
-    }
-
-    public List<WebElement> getAllSubPageLinks() {
-        List<WebElement> pageList = getAllSubPageListElements();
-        List<WebElement> pageLinks = new ArrayList<>();
-        for (WebElement page : pageList) {
-            pageLinks.add(page.findElement(anchorLocator));
-        }
-        return pageLinks;
+    @Override
+    public String getPageTitleText() {
+        return pageTitle.getText();
     }
 
     public int getNumSubPages() {
-        return getAllSubPageListElements().size();
+        return allSubPages.size();
+    }
+
+    public String getSubheaderText() {
+        return subheader.getText();
     }
 
     public List<String> getSubPageNames() {
         List<String> subPageNames = new ArrayList<>();
-        for (WebElement subPage : getAllSubPageListElements()) {
+        for (WebElement subPage : allSubPages) {
             // Where a list element includes additional details in brackets e.g. login credentials exclude these from the page name
             subPageNames.add(subPage.getText().split(" \\(")[0]);
         }
@@ -41,7 +49,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickOnPageLink(String pageName) {
-        for (WebElement subPage : getAllSubPageLinks()) {
+        for (WebElement subPage : allSubPageLinks) {
             if (subPage.getText().startsWith(pageName)) {
                 subPage.click();
                 break;

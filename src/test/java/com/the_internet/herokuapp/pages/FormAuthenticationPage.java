@@ -1,109 +1,107 @@
 package com.the_internet.herokuapp.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class FormAuthenticationPage extends BasePage {
 
-    private static final By openingParagraphLocator = By.className("subheader");
-    private static final By usernameInputLocator = By.id("username");
-    private static final By passwordInputLocator = By.id("password");
-    private static final By inputLabelLocator = By.xpath("./../label");
-    private static final By loginButtonLocator = By.xpath("//button[@type=\"submit\"]");
-    private static final By messageBannerLocator = By.id("flash");
-    private static final By logoutButtonLocator = By.className("button");
+    @FindBy(tagName = "h2")
+    WebElement pageTitle;
 
-    private WebElement getOpeningParagraph() {
-        return driver.findElement(openingParagraphLocator);
+    @FindBy(className = "subheader")
+    WebElement openingParagraph;
+
+    @FindBy(id = "username")
+    WebElement usernameInput;
+
+    @FindBy(xpath = "//input[@id = \"username\"]/../label")
+    WebElement usernameInputLabel;
+
+    @FindBy(id = "password")
+    WebElement passwordInput;
+
+    @FindBy(xpath = "//input[@id = \"password\"]/../label")
+    WebElement passwordInputLabel;
+
+    @FindBy(xpath = "//button[@type=\"submit\"]")
+    WebElement loginButton;
+
+    @FindBy(id = "flash")
+    WebElement messageBanner;
+
+    @FindBy(className = "button")
+    WebElement logoutButton;
+
+    public FormAuthenticationPage() {
+        super();
+        PageFactory.initElements(driver, this);
     }
 
-    private WebElement getUsernameInput() {
-        return driver.findElement(usernameInputLocator);
-    }
-
-    private WebElement getUsernameInputLabel() {
-        return getUsernameInput().findElement(inputLabelLocator);
-    }
-
-    private WebElement getPasswordInput() {
-        return driver.findElement(passwordInputLocator);
-    }
-
-    private WebElement getPasswordInputLabel() {
-        return getPasswordInput().findElement(inputLabelLocator);
-    }
-
-    private WebElement getLoginButton() {
-        return driver.findElement(loginButtonLocator);
-    }
-
-    private WebElement getMessageBanner() {
-        return driver.findElement(messageBannerLocator);
-    }
-
-    private WebElement getLogoutButton() {
-        return driver.findElement(logoutButtonLocator);
+    @Override
+    public String getPageTitleText() {
+        return pageTitle.getText();
     }
 
     public String getOpeningParagraphText() {
-        return getOpeningParagraph().getText();
+        return openingParagraph.getText();
     }
 
     public boolean isUsernameInputDisplayed() {
-        return getUsernameInput().isDisplayed();
+        return usernameInput.isDisplayed();
     }
 
     public String getUsernameInputLabelText() {
-        return getUsernameInputLabel().getText();
+        return usernameInputLabel.getText();
     }
 
     public boolean isPasswordInputDisplayed() {
-        return getPasswordInput().isDisplayed();
+        return passwordInput.isDisplayed();
     }
 
     public String getPasswordInputLabelText() {
-        return getPasswordInputLabel().getText();
+        return passwordInputLabel.getText();
     }
 
     public boolean isLoginButtonDisplayed() {
-        return getLoginButton().isDisplayed();
+        return loginButton.isDisplayed();
     }
 
     public String getLoginButtonText() {
-        return getLoginButton().getText();
+        return loginButton.getText();
     }
 
     public void clickLoginButton() {
-        getLoginButton().click();
+        loginButton.click();
     }
 
     public boolean isMessageBannerDisplayed() {
-        return getMessageBanner().isDisplayed();
+        return messageBanner.isDisplayed();
     }
 
     public String getMessageBannerColour() {
-        return getMessageBanner().getCssValue("background-color");
+        return messageBanner.getCssValue("background-color");
     }
 
     public String getMessageBannerText() {
         // This includes the 'x' to close the message so need to strip that off
-        String fullMessage = getMessageBanner().getText();
+        String fullMessage = messageBanner.getText();
         return fullMessage.split("\n")[0];
     }
 
     public void enterUsername(String username) {
-        getUsernameInput().sendKeys(username);
+        usernameInput.sendKeys(username);
     }
 
     public void enterPassword(String password) {
-        getPasswordInput().sendKeys(password);
+        passwordInput.sendKeys(password);
     }
 
     public boolean isLogoutButtonDisplayed() {
-        return getLogoutButton().isDisplayed();
+        return logoutButton.isDisplayed();
     }
 
     public String getLogoutButtonText() {
-        return getLogoutButton().getText();
+        return logoutButton.getText();
     }
 }

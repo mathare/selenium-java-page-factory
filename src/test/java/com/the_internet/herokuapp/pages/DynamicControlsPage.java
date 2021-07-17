@@ -2,6 +2,8 @@ package com.the_internet.herokuapp.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -10,109 +12,95 @@ import java.util.List;
 
 public class DynamicControlsPage extends BasePage {
 
-    private static final By contentLocator = By.className("example");
-    private static final By paragraphLocator = By.tagName("p");
-    private static final By sectionHeaderLocator = By.className("subheader");
-    private static final By horizontalRuleLocator = By.tagName("hr");
-    private static final By checkboxExampleFormLocator = By.id("checkbox-example");
-    private static final By inputExampleFormLocator = By.id("input-example");
+    @FindBy(tagName = "h4")
+    WebElement pageTitle;
+
+    @FindBy(tagName = "p")
+    WebElement paragraph;
+
+    @FindBy(className = "subheader")
+    List<WebElement> sectionHeaders;
+
+    @FindBy(xpath = "//div[@class=\"example\"]/hr")
+    List<WebElement> horizontalRules;
+
+    @FindBy(id = "checkbox-example")
+    WebElement checkboxExampleForm;
+
+    @FindBy(id = "input-example")
+    WebElement inputExampleForm;
+
+    @FindBy(xpath = "//input[@type=\"text\"]")
+    WebElement input;
+
+    @FindBy(id = "checkbox")
+    WebElement checkbox;
+
+    @FindBy(xpath = "//*[@id = \"checkbox\"]/..")
+    WebElement checkboxParent;
+
+    @FindBy(id = "loading")
+    WebElement loadingBar;
+
+    @FindBy(xpath = "//*[@id = \"loading\"]/img")
+    WebElement loadingBarImg;
+
+    @FindBy(id = "message")
+    WebElement message;
+
+    public DynamicControlsPage() {
+        super();
+        PageFactory.initElements(driver, this);
+    }
+
+    @Override
+    public String getPageTitleText() {
+        return pageTitle.getText();
+    }
+
     private static final By checkboxLocator = By.xpath("//input[@type=\"checkbox\"]");
     private static final By inputLocator = By.xpath("//input[@type=\"text\"]");
     private static final By buttonLocator = By.tagName("button");
-    private static final By alternativeCheckboxLocator = By.id("checkbox");
-    private static final By loadingBarLocator = By.id("loading");
-    private static final By messageLocator = By.id("message");
     private static final String buttonByTextXpath = "//button[text()=\"%s\"]";
 
-    private WebElement getParagraph() {
-        return driver.findElement(paragraphLocator);
-    }
-
-    private List<WebElement> getSectionHeaders() {
-        return driver.findElements(sectionHeaderLocator);
-    }
-
-    private List<WebElement> getHorizontalRules() {
-        return driver.findElement(contentLocator).findElements(horizontalRuleLocator);
-    }
-
-    private WebElement getCheckboxExampleForm() {
-        return driver.findElement(checkboxExampleFormLocator);
-    }
-
-    private WebElement getInputExampleForm() {
-        return driver.findElement(inputExampleFormLocator);
-    }
-
     private WebElement getSectionForm(String sectionName) {
-        return sectionName.equals("Remove/add") ? getCheckboxExampleForm() : getInputExampleForm();
+        return sectionName.equals("Remove/add") ? checkboxExampleForm : inputExampleForm;
     }
 
     private List<WebElement> getCheckboxesInSection(String sectionName) {
-        WebElement sectionForm = getSectionForm(sectionName);
-        return sectionForm.findElements(checkboxLocator);
+        return getSectionForm(sectionName).findElements(checkboxLocator);
     }
 
     private List<WebElement> getInputsInSection(String sectionName) {
-        WebElement sectionForm = getSectionForm(sectionName);
-        return sectionForm.findElements(inputLocator);
+        return getSectionForm(sectionName).findElements(inputLocator);
     }
 
     private List<WebElement> getButtonsInSection(String sectionName) {
-        WebElement sectionForm = getSectionForm(sectionName);
-        return sectionForm.findElements(buttonLocator);
-    }
-
-    private WebElement getCheckbox() {
-        return driver.findElement(alternativeCheckboxLocator);
-    }
-
-    private WebElement getCheckboxParent() {
-        return getCheckbox().findElement(parentLocator);
-    }
-
-    private WebElement getInputControl() {
-        // This will return the first matching element only. The element could be found within a named form instead
-        // (see getButton() below) to avoid potentially getting the wrong element but given the DOM this solution will
-        // work well enough
-        return driver.findElement(inputLocator);
+        return getSectionForm(sectionName).findElements(buttonLocator);
     }
 
     private WebElement getButton(String sectionName) {
-        WebElement sectionForm = getSectionForm(sectionName);
-        return sectionForm.findElement(buttonLocator);
+        return getSectionForm(sectionName).findElement(buttonLocator);
     }
 
     private WebElement getButtonByText(String buttonText) {
         return driver.findElement(By.xpath(buttonByTextXpath.replace("%s", buttonText)));
     }
 
-    private WebElement getLoadingBar() {
-        return driver.findElement(loadingBarLocator);
-    }
-
-    private WebElement getLoadingBarImg() {
-        return driver.findElement(loadingBarLocator).findElement(imageLocator);
-    }
-
-    private WebElement getMessage() {
-        return driver.findElement(messageLocator);
-    }
-
     public String getOpeningParagraphText() {
-        return getParagraph().getText();
+        return paragraph.getText();
     }
 
     public List<String> getSectionHeadersText() {
         List<String> headers = new ArrayList<>();
-        for (WebElement sectionHeader : getSectionHeaders()) {
+        for (WebElement sectionHeader : sectionHeaders) {
             headers.add(sectionHeader.getText());
         }
         return headers;
     }
 
     public int getNumHorizontalRules() {
-        return getHorizontalRules().size();
+        return horizontalRules.size();
     }
 
     public int getNumCheckboxesInSection(String sectionName) {
@@ -128,22 +116,22 @@ public class DynamicControlsPage extends BasePage {
     }
 
     public String getCheckboxLabel() {
-        if (getCheckbox().getTagName().equals("input")) {
-            return getCheckboxParent().getText();
+        if (checkbox.getTagName().equals("input")) {
+            return checkboxParent.getText();
         }
-        return getCheckbox().getText();
+        return checkbox.getText();
     }
 
     public boolean isCheckboxChecked() {
-        return getCheckbox().getAttribute("checked") != null;
+        return checkbox.getAttribute("checked") != null;
     }
 
     public String getInputControlText() {
-        return getInputControl().getText();
+        return input.getText();
     }
 
     public boolean isInputControlEnabled() {
-        return getInputControl().isEnabled();
+        return input.isEnabled();
     }
 
     public String getButtonText(String sectionName) {
@@ -155,22 +143,22 @@ public class DynamicControlsPage extends BasePage {
     }
 
     public boolean isLoadingBarDisplayed() {
-        return getLoadingBar().isDisplayed();
+        return loadingBar.isDisplayed();
     }
 
     public String getLoadingBarLabel() {
-        return getLoadingBar().getText();
+        return loadingBar.getText();
     }
 
     public String getMessageText() {
-        return getMessage().getText();
+        return message.getText();
     }
 
     public void waitForLoadingBarToDisplay() {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(getLoadingBarImg()));
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(loadingBarImg));
     }
 
     public void waitForLoadingBarToDisappear() {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.invisibilityOf(getLoadingBarImg()));
+        new WebDriverWait(driver, 10).until(ExpectedConditions.invisibilityOf(loadingBarImg));
     }
 }

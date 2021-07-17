@@ -1,7 +1,8 @@
 package com.the_internet.herokuapp.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
@@ -9,19 +10,31 @@ import java.util.List;
 
 public class DropdownPage extends BasePage {
 
-    private static final By dropdownListLocator = By.id("dropdown");
-    private static final By genericDropdownListLocator = By.tagName("select");
+    @FindBy(tagName = "h3")
+    WebElement pageTitle;
 
-    private Select getDropdownList() {
-        return new Select(driver.findElement(dropdownListLocator));
+    @FindBy(id = "dropdown")
+    WebElement dropdownList;
+
+    @FindBy(tagName = "select")
+    List<WebElement> selectListControls;
+
+    public DropdownPage() {
+        super();
+        PageFactory.initElements(driver, this);
     }
 
-    private List<WebElement> getAllDropdownLists() {
-        return driver.findElements(genericDropdownListLocator);
+    @Override
+    public String getPageTitleText() {
+        return pageTitle.getText();
+    }
+
+    private Select getDropdownList() {
+        return new Select(dropdownList);
     }
 
     public int getNumDropdownLists() {
-        return getAllDropdownLists().size();
+        return selectListControls.size();
     }
 
     public String getCurrentDropdownValue() {
