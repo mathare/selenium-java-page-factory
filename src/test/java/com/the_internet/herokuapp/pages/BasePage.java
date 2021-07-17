@@ -9,10 +9,7 @@ import java.util.Map;
 
 public abstract class BasePage {
 
-    public static WebDriver driver;
-
     public static final String BASE_URL = "https://the-internet.herokuapp.com";
-
     public static final Map<String, String> PAGE_URLS = Map.ofEntries(
             Map.entry("home", BASE_URL + "/"),
             Map.entry("checkboxes", BASE_URL + "/checkboxes"),
@@ -22,7 +19,7 @@ public abstract class BasePage {
             Map.entry("inputs", BASE_URL + "/inputs"),
             Map.entry("secure area", BASE_URL + "/secure")
     );
-
+    public static WebDriver driver;
     @FindBy(xpath = "/html/body/div[2]/a")
     static WebElement forkLink;
 
@@ -38,8 +35,6 @@ public abstract class BasePage {
     public BasePage() {
         PageFactory.initElements(driver, this);
     }
-
-    public abstract String getPageTitleText();
 
     public static String getGitHubForkText() {
         return forkLinkImg.getAttribute("alt");
@@ -60,4 +55,6 @@ public abstract class BasePage {
     public static String getPageFooterLinkUrl() {
         return footerLink.getAttribute("href");
     }
+
+    public abstract String getPageTitleText();
 }
