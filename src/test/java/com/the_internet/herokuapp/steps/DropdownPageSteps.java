@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 
 public class DropdownPageSteps {
 
-    DropdownPage page = new DropdownPage();
+    private final DropdownPage page = new DropdownPage();
 
     @When("I select {string} from the dropdown list")
     public void selectDropdownOption(String option) {

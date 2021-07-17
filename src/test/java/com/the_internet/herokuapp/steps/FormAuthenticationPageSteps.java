@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 public class FormAuthenticationPageSteps {
 
-    FormAuthenticationPage page = new FormAuthenticationPage();
+    private final FormAuthenticationPage page = new FormAuthenticationPage();
 
     @When("I enter a Username of {string}")
     public void enterUsername(String username) {

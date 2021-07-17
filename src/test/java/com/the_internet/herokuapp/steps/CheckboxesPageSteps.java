@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class CheckboxesPageSteps {
 
-    CheckboxesPage page = new CheckboxesPage();
+    private final CheckboxesPage page = new CheckboxesPage();
 
     @When("^I click on the (\\d).{2} checkbox")
     public void clickOnCheckbox(int index) {

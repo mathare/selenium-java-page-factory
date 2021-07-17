@@ -12,8 +12,8 @@ import static org.junit.Assert.*;
 
 public class DynamicControlsPageSteps {
 
-    DynamicControlsPage page = new DynamicControlsPage();
-    String section;
+    private final DynamicControlsPage page = new DynamicControlsPage();
+    private String section;
 
     @Given("I have clicked the {string} button")
     public void clickButtonAndWait(String buttonText) {

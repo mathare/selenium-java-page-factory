@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DriverManager {
 
-    public static final boolean headless = System.getProperty("headless", "true").equals("true");
+    private static final boolean headless = System.getProperty("headless", "true").equals("true");
 
     public static WebDriver getDriver() {
         WebDriver driver;
