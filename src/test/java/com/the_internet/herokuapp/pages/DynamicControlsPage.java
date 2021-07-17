@@ -1,6 +1,5 @@
 package com.the_internet.herokuapp.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -24,11 +23,23 @@ public class DynamicControlsPage extends BasePage {
     @FindBy(xpath = "//div[@class=\"example\"]/hr")
     List<WebElement> horizontalRules;
 
-    @FindBy(id = "checkbox-example")
-    WebElement checkboxExampleForm;
+    @FindBy(xpath = "//*[@id=\"checkbox-example\"]//input[@type=\"checkbox\"]")
+    List<WebElement> removeAddSectionCheckboxes;
 
-    @FindBy(id = "input-example")
-    WebElement inputExampleForm;
+    @FindBy(xpath = "//*[@id=\"checkbox-example\"]//input[@type=\"text\"]")
+    List<WebElement> removeAddSectionInputs;
+
+    @FindBy(xpath = "//*[@id=\"checkbox-example\"]//button")
+    List<WebElement> removeAddSectionButtons;
+
+    @FindBy(xpath = "//*[@id=\"input-example\"]//input[@type=\"checkbox\"]")
+    List<WebElement> enableDisableSectionCheckboxes;
+
+    @FindBy(xpath = "//*[@id=\"input-example\"]//input[@type=\"text\"]")
+    List<WebElement> enableDisableSectionInputs;
+
+    @FindBy(xpath = "//*[@id=\"input-example\"]//button")
+    List<WebElement> enableDisableSectionButtons;
 
     @FindBy(xpath = "//input[@type=\"text\"]")
     WebElement input;
@@ -48,6 +59,18 @@ public class DynamicControlsPage extends BasePage {
     @FindBy(id = "message")
     WebElement message;
 
+    @FindBy(xpath = "//button[text()=\"Remove\"]")
+    WebElement removeButton;
+
+    @FindBy(xpath = "//button[text()=\"Add\"]")
+    WebElement addButton;
+
+    @FindBy(xpath = "//button[text()=\"Enable\"]")
+    WebElement enableButton;
+
+    @FindBy(xpath = "//button[text()=\"Disable\"]")
+    WebElement disableButton;
+
     public DynamicControlsPage() {
         super();
         PageFactory.initElements(driver, this);
@@ -56,35 +79,6 @@ public class DynamicControlsPage extends BasePage {
     @Override
     public String getPageTitleText() {
         return pageTitle.getText();
-    }
-
-    private static final By checkboxLocator = By.xpath("//input[@type=\"checkbox\"]");
-    private static final By inputLocator = By.xpath("//input[@type=\"text\"]");
-    private static final By buttonLocator = By.tagName("button");
-    private static final String buttonByTextXpath = "//button[text()=\"%s\"]";
-
-    private WebElement getSectionForm(String sectionName) {
-        return sectionName.equals("Remove/add") ? checkboxExampleForm : inputExampleForm;
-    }
-
-    private List<WebElement> getCheckboxesInSection(String sectionName) {
-        return getSectionForm(sectionName).findElements(checkboxLocator);
-    }
-
-    private List<WebElement> getInputsInSection(String sectionName) {
-        return getSectionForm(sectionName).findElements(inputLocator);
-    }
-
-    private List<WebElement> getButtonsInSection(String sectionName) {
-        return getSectionForm(sectionName).findElements(buttonLocator);
-    }
-
-    private WebElement getButton(String sectionName) {
-        return getSectionForm(sectionName).findElement(buttonLocator);
-    }
-
-    private WebElement getButtonByText(String buttonText) {
-        return driver.findElement(By.xpath(buttonByTextXpath.replace("%s", buttonText)));
     }
 
     public String getOpeningParagraphText() {
@@ -104,15 +98,15 @@ public class DynamicControlsPage extends BasePage {
     }
 
     public int getNumCheckboxesInSection(String sectionName) {
-        return getCheckboxesInSection(sectionName).size();
+        return sectionName.equals("Remove/add") ? removeAddSectionCheckboxes.size() : enableDisableSectionCheckboxes.size();
     }
 
     public int getNumInputsInSection(String sectionName) {
-        return getInputsInSection(sectionName).size();
+        return sectionName.equals("Remove/add") ? removeAddSectionInputs.size() : enableDisableSectionInputs.size();
     }
 
     public int getNumButtonsInSection(String sectionName) {
-        return getButtonsInSection(sectionName).size();
+        return sectionName.equals("Remove/add") ? removeAddSectionButtons.size() : enableDisableSectionButtons.size();
     }
 
     public String getCheckboxLabel() {
@@ -135,11 +129,14 @@ public class DynamicControlsPage extends BasePage {
     }
 
     public String getButtonText(String sectionName) {
-        return getButton(sectionName).getText();
+        return sectionName.equals("Remove/add") ? removeAddSectionButtons.get(0).getText() : enableDisableSectionButtons.get(0).getText();
     }
 
     public void clickButtonByText(String buttonText) {
-        getButtonByText(buttonText).click();
+        if (buttonText.equalsIgnoreCase("Remove")) removeButton.click();
+        else if (buttonText.equalsIgnoreCase("Add")) addButton.click();
+        else if (buttonText.equalsIgnoreCase("Enable")) enableButton.click();
+        else if (buttonText.equalsIgnoreCase("Disable")) disableButton.click();
     }
 
     public boolean isLoadingBarDisplayed() {
