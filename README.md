@@ -1,3 +1,5 @@
+[![Continuous Integration Status](https://github.com/mathare/selenium-java-page-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/mathare/selenium-java-page-factory/actions)
+
 # UI Testing with Selenium Java & Junit4 - Page Factory
 
 ## Overview
