@@ -25,7 +25,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: Firefox_Test_Report
+          name: Chrome_Test_Report
           path: target/cucumber-report.html
 
   run-tests-on-firefox:
